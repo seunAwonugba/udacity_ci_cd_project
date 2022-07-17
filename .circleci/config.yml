@@ -164,14 +164,13 @@ jobs:
             - checkout
             - add_ssh_keys:
                   fingerprints:
-                      - "b9:e0:02:af:57:7f:1c:43:4a:1f:97:a7:33:c5:9f:90"
-            - attach_workspace:
-                  at: ~/
+                      [b9:e0:02:af:57:7f:1c:43:4a:1f:97:a7:33:c5:9f:90]
             - run:
                   name: Install dependencies
                   command: |
                       apk add --update --no-cache tar gzip ansible aws-cli
-
+            - attach_workspace:
+                  at: ~/
             - run:
                   name: Configure server
                   command: |
