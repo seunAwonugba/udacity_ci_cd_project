@@ -165,33 +165,22 @@ jobs:
             - add_ssh_keys:
                   fingerprints:
                       [b9:e0:02:af:57:7f:1c:43:4a:1f:97:a7:33:c5:9f:90]
+            - attach_workspace:
+                  at: ~/
             - run:
                   name: Install dependencies
                   command: |
                       apk add --update --no-cache tar gzip ansible aws-cli
-            - attach_workspace:
-                  at: ~/
             - run:
                   name: Configure server
                   command: |
-                      echo ENVIRONMENT=production > backend/.env
-                      echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> backend/.env
-                      echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
-                      echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
-                      echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
-                      echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> backend/.env
-                      echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env
-                      echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
-                      echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env
-                      echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
-                      cat backend/.env
                       cd .circleci/ansible
                       anisible-playbook -i inventory.txt configure-server.yml
             - destroy-environment
 
     run-migrations:
         docker:
-            - image: circleci/node:13.8.0
+            - image: python:3.7-alphine3.16
         # Docker image here that supports NodeJS
         steps:
             # Checkout code from git
@@ -375,9 +364,9 @@ workflows:
             - deploy-infrastructure:
                   requires:
                       [test-frontend, test-backend, scan-frontend, scan-backend]
-                  #   filters:
-                  #       branches:
-                  #           only: [test-feature-branch]
+                  filters:
+                      branches:
+                          only: [test-feature-branch]
             - configure-infrastructure:
                   requires: [deploy-infrastructure]
             - run-migrations:
