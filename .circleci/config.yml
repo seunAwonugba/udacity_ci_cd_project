@@ -159,7 +159,7 @@ jobs:
 
     configure-infrastructure:
         docker:
-            - image: python:3.7-alphine3.11
+            - image: python:3.7-alphine3.16
         steps:
             - checkout
             - add_ssh_keys:
@@ -171,7 +171,6 @@ jobs:
                       apk add --update --no-cache tar gzip ansible aws-cli
             - attach_workspace:
                   at: ~/
-
             - run:
                   name: Configure server
                   command: |
