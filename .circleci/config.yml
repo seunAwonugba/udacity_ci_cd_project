@@ -170,12 +170,12 @@ jobs:
             - run:
                   name: Install dependencies
                   command: |
-                      apk add --update --no-cache tar gzip anisble aws-cli
+                      apk add --update --no-cache tar gzip ansible aws-cli
             - run:
                   name: Configure server
                   command: |
-                      cd .circleci/anisble
-                      anisible-playbook -i inventory.txt configure-server.yml
+                      cd .circleci/ansible
+                      ansible-playbook -i inventory.txt configure-server.yml
             - destroy-environment
 
     run-migrations:
